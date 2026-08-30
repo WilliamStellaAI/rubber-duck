@@ -1,13 +1,13 @@
 ---
-name: session-handoff
+name: rubber-duck-handoff
 description: >-
-  将会话中的关键决策与坑位落盘到仓库 docs（默认 docs/session-handoff.md），
+  rubber-duck 会话落盘：将关键决策与坑位写入仓库 docs（默认 docs/session-handoff.md），
   抗聊天 context 压缩丢细节。在长会话将触顶/已多次压缩、换新聊天前、
   重大产品或技术拍板后、里程碑收尾、用户提到落盘/handoff/会话摘要/给其他会话用时使用；
   开始不熟的项目且已有落盘文档时先读再干。
 ---
 
-# 会话落盘（Session Handoff）
+# rubber-duck-handoff · 会话落盘
 
 ## 目标
 
@@ -15,7 +15,7 @@ description: >-
 
 默认路径：`docs/session-handoff.md`（没有则创建）。若已有 `docs/compass.md`（旧误称），迁移内容到 `session-handoff.md` 并删除或改为指向新文件的一行说明。
 
-由 `core-decision-memory-comms` 第 3 节在触发时路由至此；本 skill **按需读取**，不要做成 always-on rule。
+由 `rubber-duck` rule 在触发时路由至此；本 skill **按需读取**，不要做成 always-on rule。
 
 ## 被调用时怎么做
 
@@ -53,4 +53,4 @@ description: >-
 
 ## 与硬闸的关系
 
-落盘**不代替授权**。排障时下一步若是「改代码」，须已获用户「修 / 开干」；未授权前禁止换库、换架构、大改呈现——即使已写入落盘也不行。查/说根因可以写进落盘；改实现必须先过硬闸（见 `troubleshoot-hard-gate`）。
+落盘**不代替授权**。排障时下一步若是「改代码」，须已获用户「修 / 开干」；未授权前禁止换库、换架构、大改呈现——即使已写入落盘也不行。查/说根因可以写进落盘；改实现必须先过硬闸（见 `rubber-duck-troubleshoot`）。

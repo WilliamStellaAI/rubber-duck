@@ -1,7 +1,7 @@
 {
   "name": "rubber-duck",
   "version": "0.1.0",
-  "description": "Install rubber-duck agent rules + session-handoff skill into Cursor, Codex, Trae, CodeBuddy/WorkBuddy",
+  "description": "Install rubber-duck rule + rubber-duck-* skills into Cursor, Codex, Trae, CodeBuddy/WorkBuddy",
   "type": "module",
   "bin": {
     "rubber-duck": "./cli/install.mjs"

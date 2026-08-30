@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * rubber-duck installer — copy rules + session-handoff skill into agent dirs.
+ * rubber-duck installer — copy rubber-duck rule + rubber-duck-* skills into agent dirs.
  *
  *   npx rubber-duck --tool cursor|codex|trae|codebuddy|workbuddy|all
  *                   [--scope user|project] [--project <path>] [--dry-run] [--force]
@@ -19,7 +19,7 @@ const MARKER_START = '<!-- rubber-duck:start -->';
 const MARKER_END = '<!-- rubber-duck:end -->';
 
 function printHelp() {
-  console.log(`rubber-duck — 安装规则 + session-handoff skill
+  console.log(`rubber-duck — 安装：1 条总路由 rule + 全部 skills
 
 用法:
   npx rubber-duck --tool <name> [--scope user|project] [--project <path>] [--dry-run] [--force]
@@ -174,10 +174,79 @@ function installMdRules(rulesDir, opts) {
     }));
 }
 
-function installSkill(skillsDir, opts) {
-  const src = path.join(ROOT, 'skills', 'session-handoff');
-  const dest = path.join(skillsDir, 'session-handoff');
-  return copyTree(src, dest, opts);
+function installSkills(skillsDir, opts) {
+  const srcRoot = path.join(ROOT, 'skills');
+  const out = [];
+  for (const name of fs.readdirSync(srcRoot).sort()) {
+    const src = path.join(srcRoot, name);
+    if (!fs.statSync(src).isDirectory()) continue;
+    const dest = path.join(skillsDir, name);
+    out.push(...copyTree(src, dest, opts));
+  }
+  return out;
+}
+
+const OBSOLETE_CURSOR_RULES = [
+  'core-decision-memory-comms.mdc',
+  'troubleshoot-hard-gate.mdc',
+  'converge-before-shipping.mdc',
+];
+
+const OBSOLETE_MD_RULES = [
+  'core-decision-memory-comms.md',
+  'troubleshoot-hard-gate.md',
+  'converge-before-shipping.md',
+];
+
+const OBSOLETE_SKILL_DIRS = [
+  'troubleshoot-hard-gate',
+  'converge-before-shipping',
+  'session-handoff',
+  'install-rubber-duck',
+];
+
+function removeObsoleteMdRules(rulesDir, opts) {
+  const out = [];
+  for (const name of OBSOLETE_MD_RULES) {
+    const dest = path.join(rulesDir, name);
+    if (!fs.existsSync(dest)) continue;
+    if (opts.dryRun) {
+      out.push({ path: dest, action: 'dry-run-delete' });
+    } else {
+      fs.unlinkSync(dest);
+      out.push({ path: dest, action: 'deleted' });
+    }
+  }
+  return out;
+}
+function removeObsoleteCursorRules(rulesDir, opts) {
+  const out = [];
+  for (const name of OBSOLETE_CURSOR_RULES) {
+    const dest = path.join(rulesDir, name);
+    if (!fs.existsSync(dest)) continue;
+    if (opts.dryRun) {
+      out.push({ path: dest, action: 'dry-run-delete' });
+    } else {
+      fs.unlinkSync(dest);
+      out.push({ path: dest, action: 'deleted' });
+    }
+  }
+  return out;
+}
+
+function removeObsoleteSkills(skillsDir, opts) {
+  const out = [];
+  for (const name of OBSOLETE_SKILL_DIRS) {
+    const dest = path.join(skillsDir, name);
+    if (!fs.existsSync(dest)) continue;
+    if (opts.dryRun) {
+      out.push({ path: dest, action: 'dry-run-delete' });
+    } else {
+      fs.rmSync(dest, { recursive: true, force: true });
+      out.push({ path: dest, action: 'deleted' });
+    }
+  }
+  return out;
 }
 
 function isDetected(tool) {
@@ -269,7 +338,9 @@ function installOne(tool, scope, opts) {
 
   if (targets.kind === 'mdc+skill') {
     ops.push(...installMdcRules(targets.rulesDir, opts));
-    ops.push(...installSkill(targets.skillsDir, opts));
+    ops.push(...removeObsoleteCursorRules(targets.rulesDir, opts));
+    ops.push(...installSkills(targets.skillsDir, opts));
+    ops.push(...removeObsoleteSkills(targets.skillsDir, opts));
   } else if (targets.kind === 'md+skill') {
     let rulesDir = targets.rulesDir;
     if (fs.existsSync(rulesDir) && fs.statSync(rulesDir).isFile()) {
@@ -282,12 +353,16 @@ function installOne(tool, scope, opts) {
       rulesDir = fallback;
     }
     ops.push(...installMdRules(rulesDir, opts));
-    ops.push(...installSkill(targets.skillsDir, opts));
+    ops.push(...removeObsoleteMdRules(rulesDir, opts));
+    ops.push(...installSkills(targets.skillsDir, opts));
+    ops.push(...removeObsoleteSkills(targets.skillsDir, opts));
   } else if (targets.kind === 'agents+skill') {
     ops.push({ path: targets.agentsFile, action: upsertAgentsMd(targets.agentsFile, opts) });
-    ops.push(...installSkill(targets.skillsDir, opts));
+    ops.push(...installSkills(targets.skillsDir, opts));
+    ops.push(...removeObsoleteSkills(targets.skillsDir, opts));
     if (targets.legacySkillsDir) {
-      ops.push(...installSkill(targets.legacySkillsDir, opts));
+      ops.push(...installSkills(targets.legacySkillsDir, opts));
+      ops.push(...removeObsoleteSkills(targets.legacySkillsDir, opts));
     }
   }
 
