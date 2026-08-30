@@ -51,9 +51,8 @@ cli/install.mjs                可选：终端安装后备
 | Cursor | `~/.cursor/rules/*.mdc` | `~/.cursor/skills/session-handoff/` | `.cursor/rules` + `.cursor/skills` |
 | Codex | `~/.codex/AGENTS.md`（标记块） | `~/.agents/skills/`（兼写 `~/.codex/skills/`） | `AGENTS.md` + `.agents/skills/` |
 | Trae | `~/.trae/user_rules/*.md` | `~/.trae/skills/` | `.trae/rules` + `.trae/skills` |
-| CodeBuddy / WorkBuddy | `~/.codebuddy/rules/*.md` | `~/.codebuddy/skills/` | `.codebuddy/rules` + `.codebuddy/skills` |
-
-`workbuddy` 与 `codebuddy` 同一路径约定。
+| CodeBuddy | `~/.codebuddy/rules/*.md` | `~/.codebuddy/skills/` | `.codebuddy/rules` + `.codebuddy/skills` |
+| WorkBuddy | `~/.workbuddy/rules/*.md` | `~/.workbuddy/skills/` | `.workbuddy/rules` + `.workbuddy/skills` |
 
 ## 可选：终端安装
 

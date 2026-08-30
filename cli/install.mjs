@@ -29,7 +29,7 @@ function printHelp() {
   codex        Codex（AGENTS.md + .agents/skills；用户级兼写 ~/.codex/skills）
   trae         Trae（~/.trae 或项目 .trae）
   codebuddy    CodeBuddy（~/.codebuddy 或项目 .codebuddy）
-  workbuddy    WorkBuddy（与 codebuddy 相同路径约定）
+  workbuddy    WorkBuddy（~/.workbuddy 或项目 .workbuddy）
   all          对本机已检测到的工具全部安装
 
 范围:
@@ -193,11 +193,9 @@ function isDetected(tool) {
     case 'trae':
       return fs.existsSync(path.join(HOME, '.trae'));
     case 'codebuddy':
+      return fs.existsSync(path.join(HOME, '.codebuddy'));
     case 'workbuddy':
-      return (
-        fs.existsSync(path.join(HOME, '.codebuddy')) ||
-        fs.existsSync(path.join(HOME, '.workbuddy'))
-      );
+      return fs.existsSync(path.join(HOME, '.workbuddy'));
     default:
       return false;
   }
@@ -242,9 +240,19 @@ function resolveTargets(tool, scope, projectRoot) {
     };
   }
 
-  if (tool === 'codebuddy' || tool === 'workbuddy') {
+  if (tool === 'codebuddy') {
     const base =
       scope === 'project' ? path.join(projectRoot, '.codebuddy') : path.join(HOME, '.codebuddy');
+    return {
+      kind: 'md+skill',
+      rulesDir: path.join(base, 'rules'),
+      skillsDir: path.join(base, 'skills'),
+    };
+  }
+
+  if (tool === 'workbuddy') {
+    const base =
+      scope === 'project' ? path.join(projectRoot, '.workbuddy') : path.join(HOME, '.workbuddy');
     return {
       kind: 'md+skill',
       rulesDir: path.join(base, 'rules'),
@@ -320,10 +328,10 @@ function main() {
 
   let tools;
   if (args.tool === 'all') {
-    tools = ['cursor', 'codex', 'trae', 'codebuddy'].filter(isDetected);
+    tools = ['cursor', 'codex', 'trae', 'codebuddy', 'workbuddy'].filter(isDetected);
     if (tools.length === 0) {
       console.error(
-        '未检测到 cursor/codex/trae/codebuddy 配置目录。请改用 --tool <name> 强制安装到约定路径。',
+        '未检测到 cursor/codex/trae/codebuddy/workbuddy 配置目录。请改用 --tool <name> 强制安装到约定路径。',
       );
       process.exit(1);
     }

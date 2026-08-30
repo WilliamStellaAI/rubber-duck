@@ -57,11 +57,16 @@ description: >-
 - skill → `~/.trae/skills/session-handoff/`
 - 项目级：→ `<项目>/.trae/rules/` 与 `<项目>/.trae/skills/session-handoff/`
 
-### CodeBuddy / WorkBuddy
+### CodeBuddy
 
 - 用户级：`rules/*.md` → `~/.codebuddy/rules/`；skill → `~/.codebuddy/skills/session-handoff/`
 - 项目级：→ `<项目>/.codebuddy/rules/` 与 `<项目>/.codebuddy/skills/session-handoff/`
-- WorkBuddy 与 CodeBuddy 使用同一路径约定
+
+### WorkBuddy
+
+- 用户级：`rules/*.md` → `~/.workbuddy/rules/`；skill → `~/.workbuddy/skills/session-handoff/`
+- 项目级：→ `<项目>/.workbuddy/rules/` 与 `<项目>/.workbuddy/skills/session-handoff/`
+- **不要**写成 `~/.codebuddy/`（那是 CodeBuddy；本机实测 WorkBuddy 用户目录为 `~/.workbuddy/`）
 
 ## 3. 执行方式
 
