@@ -4,6 +4,16 @@
 
 名字致敬橡皮鸭调试法（Rubber Duck Debugging）：先对着鸭子把问题讲清楚，再动手——正是这套规则的出发点。
 
+## 一句话安装（推荐）
+
+**不用自己开终端。** 在当前 coding agent 里说一句即可，例如：
+
+> 请按 https://github.com/WilliamStellaAI/rubber-duck 里的 `skills/install-rubber-duck/SKILL.md`，把 rubber-duck 装到我这个 Agent（用户级）。
+
+Agent 会自行读取该 skill、拉取/定位仓库，并把 **规则 + `session-handoff` skill** 拷到本工具约定目录。装完后**新开一轮会话**再用来生效。
+
+若当前工作区已经是本仓库，说「安装 rubber-duck」即可，Agent 应执行 `skills/install-rubber-duck/SKILL.md`。
+
 ## 组成
 
 | 组件 | 形态 | 角色 |
@@ -12,10 +22,11 @@
 | `troubleshoot-hard-gate` | 全局 rule | 排障硬闸：证据 → 根因 → 停下等授权 |
 | `converge-before-shipping` | 全局 rule | 横切交付护栏：主流解、一条主线、真验收面 |
 | `session-handoff` | **skill（按需）** | 落盘细则：怎么写、必备章节；默认写入 `docs/session-handoff.md` |
+| `install-rubber-duck` | **skill（按需）** | 教 Agent 如何把本仓库装进各工具目录 |
 
 **关系**：
 
-- `core` 是总协议：其「排障」分支 → `troubleshoot-hard-gate`（rule）；其「落盘」第 3 节 → **路由到** `session-handoff` skill（仅在触发时读入上下文，避免每轮浪费）。
+- `core` 是总协议：其「排障」分支 → `troubleshoot-hard-gate`（rule）；其「落盘」第 3 节 → **路由到** `session-handoff` skill（仅在触发时读入上下文）。
 - `converge-before-shipping` 是贯穿始终的横切护栏，与另几条是「叠加」而非「先后」。
 
 ## 目录结构
@@ -23,35 +34,17 @@
 ```
 rules/                         规则语义源（跨工具通用稿，无 frontmatter）
 skills/session-handoff/        落盘 skill（按需）
-install/cursor/                Cursor 规则安装副本（.mdc）
-cli/install.mjs                一键安装器
+skills/install-rubber-duck/    给 Agent 用的安装 skill（一句话安装）
+install/cursor/                仅 Cursor 的预生成 .mdc 副本（见该目录 README）
+cli/install.mjs                可选：终端安装后备
 ```
 
-**语义源为准**：改规则先改 `rules/`，再同步到 `install/cursor/`；改落盘流程只改 `skills/session-handoff/`。
+**为何有 `install/cursor/`？**  
+语义源在 `rules/`。只有 Cursor 需要带 `alwaysApply` 等 frontmatter 的 `.mdc`，故单独预生成；Codex / Trae / CodeBuddy 安装时直接读 `rules/*.md`，不设 `install/codex` 等平行目录，避免重复漂移。说明见 [`install/cursor/README.md`](./install/cursor/README.md)。
 
-## 一键安装（推荐）
+**语义源为准**：改规则先改 `rules/`，再同步 `install/cursor/`；改落盘只改 `skills/session-handoff/`。
 
-需要 Node.js ≥ 18。
-
-```bash
-# 克隆后本地安装
-git clone https://github.com/WilliamStellaAI/rubber-duck.git
-cd rubber-duck
-node cli/install.mjs --tool cursor
-
-# 或一次性装本机已检测到的工具
-node cli/install.mjs --tool all
-```
-
-| 参数 | 说明 |
-|------|------|
-| `--tool` | `cursor` / `codex` / `trae` / `codebuddy` / `workbuddy` / `all` |
-| `--scope` | `user`（默认，用户级）或 `project`（项目级） |
-| `--project` | 项目根路径（`--scope project` 时，默认当前目录） |
-| `--dry-run` | 只打印将写入的路径，不落盘 |
-| `--force` | 强制覆盖已有文件 |
-
-### 各工具写入位置
+## 各工具写入位置
 
 | 工具 | 用户级 rules | 用户级 skill | 项目级 |
 |------|--------------|--------------|--------|
@@ -60,29 +53,30 @@ node cli/install.mjs --tool all
 | Trae | `~/.trae/user_rules/*.md` | `~/.trae/skills/` | `.trae/rules` + `.trae/skills` |
 | CodeBuddy / WorkBuddy | `~/.codebuddy/rules/*.md` | `~/.codebuddy/skills/` | `.codebuddy/rules` + `.codebuddy/skills` |
 
-`workbuddy` 与 `codebuddy` 使用同一路径约定（CodeBuddy 目录）。
+`workbuddy` 与 `codebuddy` 同一路径约定。
 
-安装后请**新开 Agent 会话**再验证。
+## 可选：终端安装
 
-## 手动安装
-
-### Cursor
+需要自己跑命令时，可用 Node.js（建议 ≥ 18，非硬性 API 依赖）：
 
 ```bash
-cp install/cursor/*.mdc ~/.cursor/rules/
-mkdir -p ~/.cursor/skills
-cp -R skills/session-handoff ~/.cursor/skills/
+git clone https://github.com/WilliamStellaAI/rubber-duck.git
+cd rubber-duck
+node cli/install.mjs --tool cursor          # 或 codex / trae / codebuddy / workbuddy / all
+node cli/install.mjs --tool all --dry-run
 ```
 
-### 仅合并进仓库 AGENTS.md
-
-把 `rules/*.md` 合并进项目 `AGENTS.md`，并把 `skills/session-handoff/` 拷到该工具会扫描的 skills 目录。
-
-**注意**：同一工具内不要叠多份规则全文；`session-handoff` 不要再做成 always-on rule。
+| 参数 | 说明 |
+|------|------|
+| `--tool` | `cursor` / `codex` / `trae` / `codebuddy` / `workbuddy` / `all` |
+| `--scope` | `user`（默认）或 `project` |
+| `--project` | 项目根（`--scope project` 时） |
+| `--dry-run` | 只打印路径 |
+| `--force` | 强制覆盖 |
 
 ## 落盘文档
 
-触发后由 skill 读写各项目仓库内的 `docs/session-handoff.md`。没有则创建。不依赖本机绝对路径。
+触发后由 `session-handoff` skill 读写各项目内 `docs/session-handoff.md`。没有则创建。
 
 ## License
 
