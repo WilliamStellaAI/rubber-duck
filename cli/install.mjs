@@ -177,7 +177,10 @@ function installMdRules(rulesDir, opts) {
 function installSkills(skillsDir, opts) {
   const srcRoot = path.join(ROOT, 'skills');
   const out = [];
+  // rubber-duck-install 只留在仓库里供首次安装阅读，不拷进用户 Agent
+  const skip = new Set(['rubber-duck-install']);
   for (const name of fs.readdirSync(srcRoot).sort()) {
+    if (skip.has(name)) continue;
     const src = path.join(srcRoot, name);
     if (!fs.statSync(src).isDirectory()) continue;
     const dest = path.join(skillsDir, name);
@@ -203,6 +206,7 @@ const OBSOLETE_SKILL_DIRS = [
   'converge-before-shipping',
   'session-handoff',
   'install-rubber-duck',
+  'rubber-duck-install', // 仓库内安装剧本，不应装进用户 Agent
 ];
 
 function removeObsoleteMdRules(rulesDir, opts) {

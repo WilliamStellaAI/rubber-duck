@@ -41,7 +41,6 @@ alwaysApply: true
 | 排障（含用户报异常/截图） | `rubber-duck-troubleshoot` |
 | 实现常见需求 / 准备宣布完成 / 连续翻车后 | `rubber-duck-ship` |
 | 用户要求落盘、拍板后、换聊天前、多次压缩后 | `rubber-duck-handoff` |
-| 用户要求安装本套规则 | `rubber-duck-install` |
 
 **开工前**：若存在 `docs/session-handoff.md`（或旧名 `docs/compass.md`），非琐碎任务先读。
 

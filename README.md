@@ -17,23 +17,23 @@
 | 组件 | 形态 | 角色 |
 |------|------|------|
 | `rubber-duck` | **唯一 always-on rule** | 沟通 + 决策门 + **红线** + skill 路由 |
-| `rubber-duck-troubleshoot` | skill | 排障硬闸 + 四问 |
-| `rubber-duck-ship` | skill | 收敛交付 |
-| `rubber-duck-handoff` | skill | 会话落盘（写入 `docs/session-handoff.md`） |
-| `rubber-duck-install` | skill | 教 Agent 安装本仓库 |
+| `rubber-duck-troubleshoot` | skill（装进 Agent） | 排障硬闸 + 四问 |
+| `rubber-duck-ship` | skill（装进 Agent） | 收敛交付 |
+| `rubber-duck-handoff` | skill（装进 Agent） | 会话落盘（写入 `docs/session-handoff.md`） |
+| `rubber-duck-install` | **仅存仓库** | 首次安装剧本；**不**拷进用户 Agent |
 
-**原则**：红线留在每轮注入的 `rubber-duck`；长文细则进 `rubber-duck-*` skill。
+**原则**：红线留在每轮注入的 `rubber-duck`；长文细则进三个运行时 skill。安装说明只在仓库里读一次，装完即丢。
 
 ## 目录结构
 
 ```
 rules/rubber-duck.md
 skills/
-  rubber-duck-troubleshoot/
+  rubber-duck-troubleshoot/   # 装进 Agent
   rubber-duck-ship/
   rubber-duck-handoff/
-  rubber-duck-install/
-install/cursor/rubber-duck.mdc    仅 Cursor 预生成副本
+  rubber-duck-install/        # 仅仓库；安装器不会拷走
+install/cursor/rubber-duck.mdc
 cli/install.mjs
 ```
 
