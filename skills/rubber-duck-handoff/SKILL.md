@@ -1,10 +1,9 @@
 ---
 name: rubber-duck-handoff
 description: >-
-  rubber-duck 会话落盘：将关键决策与坑位写入仓库 docs（默认 docs/session-handoff.md），
-  抗聊天 context 压缩丢细节。在长会话将触顶/已多次压缩、换新聊天前、
-  重大产品或技术拍板后、里程碑收尾、用户提到落盘/handoff/会话摘要/给其他会话用时使用；
-  开始不熟的项目且已有落盘文档时先读再干。
+  rubber-duck 会话落盘：把关键决策和坑位写进仓库 docs，默认 docs/session-handoff.md，防止聊天被压缩后丢细节。
+  用户说「落个盘」「handoff」「整理一下会话摘要」「给下一个会话用」时使用；长会话快触顶、已多次压缩、换新聊天前、重大拍板后、里程碑收尾时也用。
+  只是临时记一句、或还没拍板的话题不用：那种直接说，不写进落盘文档。开始不熟的项目而已有落盘文档时，先读再干。
 ---
 
 # rubber-duck-handoff · 会话落盘

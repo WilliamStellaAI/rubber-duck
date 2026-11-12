@@ -1,0 +1,10 @@
+[
+  {"query": "落个盘吧，这个会话聊了很多", "should_trigger": true},
+  {"query": "我要换新聊天了，帮我整理一份给下个会话看的摘要", "should_trigger": true},
+  {"query": "刚拍板了，把这个决定写进 handoff", "should_trigger": true},
+  {"query": "把这次会话记一下", "should_trigger": true},
+  {"query": "我先把这句话记在聊天里，等下再说", "should_trigger": false},
+  {"query": "帮我看看这个 bug 为什么报错", "should_trigger": false},
+  {"query": "把这段代码格式化一下", "should_trigger": false},
+  {"query": "这个需求先别做，我们讨论一下要不要", "should_trigger": false}
+]

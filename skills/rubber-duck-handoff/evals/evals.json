@@ -1,0 +1,17 @@
+{
+  "skill_name": "rubber-duck-handoff",
+  "evals": [
+    {
+      "prompt": "落个盘吧，这个会话聊了很多",
+      "expected_output": "先读现有 docs/session-handoff.md 和相关 docs。收集本会话拍板项、git log、未提交的高信号改动。合并更新，不整文件覆盖。保留仍有效的决策，过时项标已废弃。回复里写明更新了哪个路径和最重要的 3 条变更。不 commit，除非用户要求。"
+    },
+    {
+      "prompt": "我要换新聊天了，帮我整理一份给下个会话看的摘要",
+      "expected_output": "写进 docs/session-handoff.md 的七个必备章节。记决策和不变量，不记 UI 微调。不贴整段聊天。不写密钥。"
+    },
+    {
+      "prompt": "这个 bug 你刚才查出来了，直接改吧",
+      "expected_output": "查出的根因可以写进落盘文档，但改实现前要先拿到「修 / 开干」这类明确授权。落盘不代替授权。"
+    }
+  ]
+}

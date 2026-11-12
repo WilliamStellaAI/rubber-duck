@@ -1,0 +1,10 @@
+[
+  {"query": "为什么这个图表看不见？截图里什么都没有", "should_trigger": true},
+  {"query": "不对，还是没显示，你换个图表库吧", "should_trigger": true},
+  {"query": "点了没反应，是不是挂了", "should_trigger": true},
+  {"query": "这段文案怎么跟设计稿不一样", "should_trigger": true},
+  {"query": "做个新的详情页", "should_trigger": false},
+  {"query": "把这段 JSON 格式化一下", "should_trigger": false},
+  {"query": "Kafka 消费组再平衡是怎么回事", "should_trigger": false},
+  {"query": "落个盘，把刚才的决定记一下", "should_trigger": false}
+]

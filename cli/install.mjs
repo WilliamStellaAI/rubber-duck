@@ -77,9 +77,13 @@ function ensureDir(dir, dryRun) {
 }
 
 function copyFile(src, dest, { dryRun, force }) {
-  if (!force && fs.existsSync(dest)) {
+  if (fs.existsSync(dest)) {
     const same = Buffer.compare(fs.readFileSync(src), fs.readFileSync(dest)) === 0;
     if (same) return 'skip-same';
+    if (!force) {
+      // 目标已被改过。默认不覆盖，交给人决定，避免一次重装抹掉本地改动。
+      return 'skip-modified';
+    }
   }
   if (dryRun) return 'dry-run';
   ensureDir(path.dirname(dest), false);
@@ -424,11 +428,13 @@ function main() {
   console.log('');
 
   let wrote = 0;
+  const skipped = [];
   for (const tool of tools) {
     const result = installOne(tool, args.scope, opts);
     console.log(`## ${result.tool}`);
     for (const op of result.ops) {
       if (op.action === 'wrote' || op.action === 'dry-run') wrote++;
+      if (op.action === 'skip-modified') skipped.push(op.path);
       console.log(`  [${op.action}] ${op.path}${op.note ? ` — ${op.note}` : ''}`);
     }
     console.log('');
@@ -437,6 +443,12 @@ function main() {
   console.log('完成。请新开 Agent 会话使 rules/skills 生效。');
   if (opts.dryRun) console.log('（dry-run：未写入磁盘）');
   if (wrote === 0) console.log('没有新写入（可能已是最新）。可用 --force 强制覆盖。');
+  if (skipped.length) {
+    console.log('');
+    console.log('以下文件的目标已被改动，为保护本地修改没有覆盖：');
+    for (const p of skipped) console.log(`  ${p}`);
+    console.log('确认要用仓库版本覆盖时，加 --force 重跑。');
+  }
 }
 
 main();

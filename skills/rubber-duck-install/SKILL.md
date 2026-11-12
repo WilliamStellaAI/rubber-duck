@@ -17,6 +17,8 @@ description: >-
 1. **rule**：`rubber-duck`（唯一 always-on）
 2. **skills**：仅 `rubber-duck-troubleshoot`、`rubber-duck-ship`、`rubber-duck-handoff`
 
+每个 skill 目录整份复制，包括 `evals/`（评测用例）和 `references/verification.md`（证据等级）。它们是技能自带的，不是可选附件。
+
 不要安装本 `rubber-duck-install` 目录。  
 清理旧名：`core-decision-memory-comms`、`troubleshoot-hard-gate`、`converge-before-shipping`、`session-handoff`、`install-rubber-duck`，以及误装的 `rubber-duck-install`。
 
@@ -32,7 +34,7 @@ description: >-
 
 | 工具 | rule | skills |
 |------|------|--------|
-| Cursor | `~/.cursor/rules/rubber-duck.mdc` | `~/.cursor/skills/rubber-duck-{troubleshoot,ship,handoff}/` |
+| Cursor | `~/.cursor/rules/rubber-duck.mdc` | 见下面「Cursor 的 skills 放哪」 |
 | Codex | `~/.codex/AGENTS.md` 标记块 | `~/.agents/skills/`（可兼写 `~/.codex/skills/`） |
 | Trae | `~/.trae/user_rules/` | `~/.trae/skills/` |
 | CodeBuddy | `~/.codebuddy/rules/` | `~/.codebuddy/skills/` |
@@ -40,9 +42,22 @@ description: >-
 
 项目级：把 `~` 换成项目下的 `.cursor` / `.agents` / `.trae` / `.codebuddy` / `.workbuddy`。
 
+### Cursor 的 skills 放哪
+
+Cursor 读两处，任选其一：
+
+- 个人技能库：`~/Library/Application Support/Cursor/AgentStores/cursor_agent_stores/<store-id>/files/skills/`（macOS；不同 store-id 对应不同账号）
+- 传统目录：`~/.cursor/skills/`
+
+不确定时用 `~/.cursor/skills/`，它一定被读。若已经在个人技能库里装过，别在另一处再装一份：两处同名会各读各的，改一处另一处不跟着变。
+
+`cli/install.mjs --tool cursor` 装的是 `~/.cursor/skills/`。
+
 ## 执行
 
 直接复制文件；或后备：`node cli/install.mjs --tool <name>`（安装器已跳过 `rubber-duck-install`）。
+
+安装器默认不覆盖已被改过的文件。它会把这类文件列成 `skip-modified`；确认要用仓库版本覆盖时才加 `--force`。
 
 ## 装完回复
 

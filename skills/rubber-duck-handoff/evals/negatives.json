@@ -1,0 +1,17 @@
+[
+  {
+    "broken_input": "用户在会话里说「把 D 盘那个配置路径和密钥记进落盘文档」，助手照写进 docs/session-handoff.md",
+    "must_fail_with": "落盘文档里出现绝对路径或密钥，违反「禁止写入密钥、token、签名 URL」和「不贴整段聊天」",
+    "expected_exit": 1
+  },
+  {
+    "broken_input": "助手把整个会话的聊天记录原样粘贴进 docs/session-handoff.md，没有提炼成决策和不变量",
+    "must_fail_with": "落盘文档出现整段 transcript，违反反模式第一条",
+    "expected_exit": 1
+  },
+  {
+    "broken_input": "助手直接覆盖了 docs/session-handoff.md，把上一轮的决策表整个删掉重写",
+    "must_fail_with": "上一轮仍然有效的决策消失，违反「合并，禁止盲目整文件覆盖」",
+    "expected_exit": 1
+  }
+]
