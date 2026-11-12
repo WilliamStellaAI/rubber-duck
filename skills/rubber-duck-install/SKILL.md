@@ -39,19 +39,22 @@ description: >-
 | Trae | `~/.trae/user_rules/` | `~/.trae/skills/` |
 | CodeBuddy | `~/.codebuddy/rules/` | `~/.codebuddy/skills/` |
 | WorkBuddy | `~/.workbuddy/rules/` | `~/.workbuddy/skills/`（勿用 `.codebuddy`） |
+| dsh | `~/.dsh/AGENTS.md`（整份即 rule，无标记块） | `~/.dsh/skills/` |
 
 项目级：把 `~` 换成项目下的 `.cursor` / `.agents` / `.trae` / `.codebuddy` / `.workbuddy`。
 
+`cli/install.mjs` 不认 dsh 和 Cursor 个人技能库，这两处按上表手工复制。
+
 ### Cursor 的 skills 放哪
 
-Cursor 读两处，任选其一：
+Cursor 读两处：
 
-- 个人技能库：`~/Library/Application Support/Cursor/AgentStores/cursor_agent_stores/<store-id>/files/skills/`（macOS；不同 store-id 对应不同账号）
+- 个人技能库：`~/Library/Application Support/Cursor/AgentStores/cursor_agent_stores/<store-id>/files/skills/`
 - 传统目录：`~/.cursor/skills/`
 
-不确定时用 `~/.cursor/skills/`，它一定被读。若已经在个人技能库里装过，别在另一处再装一份：两处同名会各读各的，改一处另一处不跟着变。
+**先看哪一处已经装了。** 已经装了就不要在另一处再装一份：两处同名会各读各的，改一处另一处不跟着变。
 
-`cli/install.mjs --tool cursor` 装的是 `~/.cursor/skills/`。
+`cli/install.mjs --tool cursor` 只认 `~/.cursor/skills/`。如果个人技能库里已经有，别跑这条命令，直接把 `skills/` 下的三个目录复制进个人技能库。
 
 ## 执行
 
